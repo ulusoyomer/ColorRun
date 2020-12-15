@@ -25,31 +25,34 @@ public class Wall : MonoBehaviour
         wall1.name = "Wall1";
         wall2.name = "Wall2";
 
+
+
         wall1.transform.SetParent(transform);
         wall2.transform.SetParent(transform);
 
 
+        wall1.transform.localPosition = Vector3.zero;
+        wall2.transform.localPosition = Vector3.zero;
+
+        
+
         for (int i = 0; i < 100; i++)
         {
-            GameObject WallF = Instantiate(wallFragment, transform.position, Quaternion.Euler(0,0,rotationZ));
-            Debug.Log(rotationZ);
+            GameObject WallF = Instantiate(wallFragment, transform.position, Quaternion.Euler(0, 0, rotationZ));
             rotationZ += 3.6f;
 
             if (rotationZ <= rotationZMax)
             {
                 WallF.transform.SetParent(wall1.transform);
-                WallF.gameObject.tag = "Hit";
+                WallF.tag = "Hit";
             }
             else
             {
                 WallF.transform.SetParent(wall2.transform);
+                WallF.tag = "Fail";
             }
         }
-
-        wall1.transform.localPosition = Vector3.zero;
-        wall2.transform.localPosition = Vector3.zero;
-
-       wall1.transform.localRotation = Quaternion.Euler(Vector3.zero);
-       wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        wall1.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 }

@@ -6,6 +6,8 @@ public class GameController : MonoBehaviour
 {
     public static GameController instance { get; set; }
 
+    private GameObject finishLine;
+
     public Color[] colors;
     [HideInInspector]
     public Color hitColor, failColor;
@@ -17,11 +19,14 @@ public class GameController : MonoBehaviour
     {
         instance = this;
         GenerateColors();
+        finishLine = Instantiate(Resources.Load("FinishLine") as GameObject, transform.position, Quaternion.identity);
+        finishLine.transform.SetParent(GameObject.Find("Road").transform);
+        finishLine.tag = "FinishLine";
     }
 
     void Start()
-    {
-        SpawnWalls();
+    {      
+        SpawnWalls();     
     }
 
     void GenerateColors()
@@ -45,6 +50,7 @@ public class GameController : MonoBehaviour
             float randomRotation = Random.Range(0, 360);
             wall.transform.localRotation = Quaternion.Euler(new Vector3(0,0, randomRotation));
             z += 7;
-        }
+            finishLine.transform.localPosition = new Vector3(0, 0, z);
+        }       
     }
 }

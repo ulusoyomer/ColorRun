@@ -43,6 +43,23 @@ public class Ball : MonoBehaviour
         mesRenderer.sharedMaterial.color = currentColor;
     }
 
-
+    private void OnTriggerEnter(Collider target)
+    {
+        print(target.tag);
+        switch (target.tag)
+        {
+            case "Hit":
+                print("We Hit th Wall");
+                break;
+            case "Fail":
+                print("Game Over");
+                break;
+            case "FinishLine":
+                print("Finish The game");
+                break;
+            default:
+                break;
+        }
+    }
 
 }
