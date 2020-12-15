@@ -4,15 +4,34 @@ using UnityEngine;
 
 public class Road : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private bool movable = true;
 
-    // Update is called once per frame
+    private float angle,lastDeltaAngle,lastTouchX;
+
+
+    
     void Update()
     {
-        Tap.GetIsTapped();
+        // Road Turn
+        if (movable && Tap.GetIsTapped())
+        {
+            float mouseX = this.GetMouseX();
+            lastDeltaAngle = lastTouchX - mouseX;
+            angle += lastDeltaAngle * 360 * 1.7f;
+            lastTouchX = mouseX;
+        }
+        else if (lastDeltaAngle != 0)
+        {
+            lastDeltaAngle -= lastDeltaAngle * 5 * Time.deltaTime;
+            angle += lastDeltaAngle * 360 * 1.7f;
+        }
+
+        transform.eulerAngles = new Vector3(0, 0, angle);
+        // Road Turn End
+    }
+
+    private float GetMouseX()
+    {
+        return Input.mousePosition.x / (float)Screen.width;
     }
 }
