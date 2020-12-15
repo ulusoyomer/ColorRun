@@ -32,11 +32,13 @@ public class Wall : MonoBehaviour
         for (int i = 0; i < 100; i++)
         {
             GameObject WallF = Instantiate(wallFragment, transform.position, Quaternion.Euler(0,0,rotationZ));
+            Debug.Log(rotationZ);
             rotationZ += 3.6f;
 
             if (rotationZ <= rotationZMax)
             {
                 WallF.transform.SetParent(wall1.transform);
+                WallF.gameObject.tag = "Hit";
             }
             else
             {
@@ -46,5 +48,8 @@ public class Wall : MonoBehaviour
 
         wall1.transform.localPosition = Vector3.zero;
         wall2.transform.localPosition = Vector3.zero;
+
+       wall1.transform.localRotation = Quaternion.Euler(Vector3.zero);
+       wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }
 }
