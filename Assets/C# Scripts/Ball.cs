@@ -45,7 +45,7 @@ public class Ball : MonoBehaviour
 
     private void OnTriggerEnter(Collider target)
     {
-        print(target.tag);
+
         switch (target.tag)
         {
             case "Hit":

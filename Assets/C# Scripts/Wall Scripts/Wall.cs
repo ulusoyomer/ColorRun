@@ -9,6 +9,8 @@ public class Wall : MonoBehaviour
 
     private float rotationZ;
     private float rotationZMax = 180;
+
+
     void Awake()
     {
         wallFragment = Resources.Load("Wall Fragment") as GameObject;
@@ -52,6 +54,8 @@ public class Wall : MonoBehaviour
                 WallF.tag = "Fail";
             }
         }
+
+
         wall1.transform.localRotation = Quaternion.Euler(Vector3.zero);
         wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
     }

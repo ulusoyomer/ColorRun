@@ -15,18 +15,19 @@ public class GameController : MonoBehaviour
     private int wallsSpawnNumber = 11;
     private float z = 7;
 
+    private bool colorBump;
+
     void Awake()
     {
         instance = this;
         GenerateColors();
         finishLine = Instantiate(Resources.Load("FinishLine") as GameObject, transform.position, Quaternion.identity);
-        finishLine.transform.SetParent(GameObject.Find("Road").transform);
         finishLine.tag = "FinishLine";
     }
 
     void Start()
-    {      
-        SpawnWalls();     
+    {   
+        SpawnWalls();
     }
 
     void GenerateColors()
@@ -44,11 +45,22 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < wallsSpawnNumber; i++)
         {
             GameObject wall;
-            wall = Instantiate(Resources.Load("Wall") as GameObject, transform.position, Quaternion.identity);
+
+            if (Random.value <= 0.2 && !colorBump)
+            {
+                colorBump = true;
+                wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);
+            }
+            else
+            {
+                wall = Instantiate(Resources.Load("Wall") as GameObject, transform.position, Quaternion.identity);
+            }
+
             wall.transform.SetParent(GameObject.Find("Road").transform);
             wall.transform.localPosition = new Vector3(0,0,z);
             float randomRotation = Random.Range(0, 360);
             wall.transform.localRotation = Quaternion.Euler(new Vector3(0,0, randomRotation));
+
             z += 7;
             finishLine.transform.localPosition = new Vector3(0, 0, z);
         }       
