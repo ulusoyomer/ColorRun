@@ -75,7 +75,7 @@ public class GameController : MonoBehaviour
         {
             GameObject wall;
 
-            if (Random.value <= 0.4 && !colorBump)
+            if (Random.value <= 0.2 && !colorBump)
             {
                 colorBump = true;
                 wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);
@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour
                 wall = Instantiate(Resources.Load("Wall") as GameObject, transform.position, Quaternion.identity);
                 z += 3;
             }
-            else if (i <= 9 && !colorBump)
+            else if (i >= wallsSpawnNumber && !colorBump)
             {
                 colorBump = true;
                 wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);

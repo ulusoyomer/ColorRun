@@ -15,10 +15,21 @@ public class WallFragment : MonoBehaviour
     {
         if (gameObject.tag == "Hit")
         {
+            var colorBump = GameObject.FindGameObjectWithTag("ColorRing");
+
+            if (transform.position.z > colorBump.transform.position.z)
+            {
+                GameController.instance.hitColor = colorBump.GetComponent<ColorBump>().GetColor();
+            }
+
             meshRenderer.material.color = GameController.instance.hitColor;
         }
         else
         {
+            while (GameController.instance.failColor == GameController.instance.hitColor)
+            {
+                GameController.instance.failColor = GameController.instance.colors[Random.Range(0, GameController.instance.colors.Length)];
+            }
             meshRenderer.material.color = GameController.instance.failColor;
         }
     }

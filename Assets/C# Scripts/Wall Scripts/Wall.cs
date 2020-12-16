@@ -5,6 +5,7 @@ using UnityEngine;
 public class Wall : MonoBehaviour
 {
     private GameObject wallFragment;
+    private GameObject perfectStar;
     private GameObject wall1, wall2;
 
     private float rotationZ;
@@ -14,6 +15,7 @@ public class Wall : MonoBehaviour
     void Awake()
     {
         wallFragment = Resources.Load("Wall Fragment") as GameObject;
+        perfectStar = Resources.Load("PerfectStar") as GameObject;
     }
     private void Start()
     {
@@ -60,5 +62,17 @@ public class Wall : MonoBehaviour
         wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
         wall1.tag = "HitWall";
         wall2.tag = "FailWall";
+        var wallFragmentChild = wall1.transform.GetChild(25).gameObject;
+        AddStar(wallFragmentChild);
     }
+
+
+    void AddStar(GameObject wallFragmentChild)
+    {
+        var star = Instantiate(perfectStar, transform.position, Quaternion.identity);
+        star.transform.SetParent(wallFragmentChild.transform);
+        star.transform.localPosition = new Vector3(0.05f,0.75f, -0.06f);
+    }
+
+
 }
