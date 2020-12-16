@@ -11,6 +11,7 @@ public class Wall : MonoBehaviour
     private float rotationZ;
     private float rotationZMax = 180;
 
+    private bool smallWall;
 
     void Awake()
     {
@@ -38,7 +39,16 @@ public class Wall : MonoBehaviour
         wall1.transform.localPosition = Vector3.zero;
         wall2.transform.localPosition = Vector3.zero;
 
-        
+        if (Random.value <= 0.2) smallWall = true;
+
+        if (smallWall)
+        {
+            rotationZMax = 90;
+        }
+        else
+        {
+            rotationZMax = 180;
+        }
 
         for (int i = 0; i < 100; i++)
         {
@@ -62,8 +72,19 @@ public class Wall : MonoBehaviour
         wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
         wall1.tag = "HitWall";
         wall2.tag = "FailWall";
-        var wallFragmentChild = wall1.transform.GetChild(25).gameObject;
-        AddStar(wallFragmentChild);
+
+        if (!smallWall)
+        {
+            var wallFragmentChild = wall1.transform.GetChild(25).gameObject;
+            AddStar(wallFragmentChild);
+        }
+        else
+        {
+            var wallFragmentChild = wall1.transform.GetChild(14).gameObject;
+            AddStar(wallFragmentChild);
+        }
+
+        
     }
 
 
