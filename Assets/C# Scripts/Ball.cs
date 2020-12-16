@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class Ball : MonoBehaviour
     private bool move;
     private static Color currentColor;
     public static Color Color { get { return currentColor; } set { currentColor = value; } }
+
 
     private MeshRenderer mesRenderer;
 
@@ -24,6 +26,10 @@ public class Ball : MonoBehaviour
 
     void Update()
     {
+        if (!move)
+        {
+            Ball.z = 0;
+        }
         if (Tap.GetIsTapped())
             move = true;
         if (move)
@@ -52,7 +58,9 @@ public class Ball : MonoBehaviour
                 print("We Hit th Wall");
                 break;
             case "Fail":
-                print("Game Over");
+                print("Fail");
+                ResertBall();
+                GameController.instance.GenerateLevel();
                 break;
             case "FinishLine":
                 print("Finish The game");
@@ -62,4 +70,8 @@ public class Ball : MonoBehaviour
         }
     }
 
+    public void ResertBall()
+    {
+        move = false;
+    }
 }

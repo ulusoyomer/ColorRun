@@ -58,5 +58,7 @@ public class Wall : MonoBehaviour
 
         wall1.transform.localRotation = Quaternion.Euler(Vector3.zero);
         wall2.transform.localRotation = Quaternion.Euler(Vector3.zero);
+        wall1.tag = "HitWall";
+        wall2.tag = "FailWall";
     }
 }

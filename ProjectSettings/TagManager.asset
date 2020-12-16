@@ -8,6 +8,11 @@ TagManager:
   - FinishLine
   - Fail
   - ColorRing
+  - Walls
+  - Wall
+  - HitWall
+  - FailWall
+  - Road
   layers:
   - Default
   - TransparentFX
