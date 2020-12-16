@@ -31,7 +31,8 @@ public class GameController : MonoBehaviour
 
     public void GenerateLevel()
     {
-        wallsSpawnNumber = 12;
+        wallsSpawnNumber += 2;
+        Ball.speed += 0.50f;
         DeleteWalls();
         z = 7;
         colorBump = false;
@@ -84,9 +85,9 @@ public class GameController : MonoBehaviour
             else if (Random.value <= 0.2)
             {
                 wall = Instantiate(Resources.Load("Wall") as GameObject, transform.position, Quaternion.identity);
-                z += 3;
+                z += 5;
             }
-            else if (i >= wallsSpawnNumber && !colorBump)
+            else if (i >= wallsSpawnNumber - 3 && !colorBump)
             {
                 colorBump = true;
                 wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);

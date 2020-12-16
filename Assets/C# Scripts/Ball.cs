@@ -6,10 +6,12 @@ using UnityEngine;
 public class Ball : MonoBehaviour
 {
     private static float z;
-    private float height = 0.58f, speed = 6;
-    private bool move;
+    private float height = 0.58f;
+    public static float speed = 8;
+    private bool move,isRising;
     private static Color currentColor;
     public static Color Color { get { return currentColor; } set { currentColor = value; } }
+    private float lerpAmount;
 
 
     private MeshRenderer mesRenderer;
@@ -24,7 +26,7 @@ public class Ball : MonoBehaviour
         mesRenderer = GetComponent<MeshRenderer>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!move)
         {
@@ -39,6 +41,7 @@ public class Ball : MonoBehaviour
         UpdateColor();
     }
 
+
     public static float GetZ()
     {
         return Ball.z;
@@ -47,6 +50,16 @@ public class Ball : MonoBehaviour
     void UpdateColor()
     {
         mesRenderer.sharedMaterial.color = currentColor;
+        if (isRising)
+        {
+            currentColor = Color.Lerp(mesRenderer.material.color, GameObject.FindGameObjectWithTag("ColorRing")
+                .GetComponent<ColorBump>().GetColor(), lerpAmount);
+            lerpAmount += Time.deltaTime;
+        }
+        if (lerpAmount >= 1)
+        {
+            isRising = false;
+        }
     }
 
     private void OnTriggerEnter(Collider target)
@@ -55,23 +68,33 @@ public class Ball : MonoBehaviour
         switch (target.tag)
         {
             case "Hit":
-                print("We Hit th Wall");
+                Destroy(target.transform.parent.gameObject);
                 break;
             case "Fail":
-                print("Fail");
-                ResertBall();
-                GameController.instance.GenerateLevel();
+                StartCoroutine(GameOver());
+                break;
+            case "ColorRing":
+                lerpAmount = 0;
+                isRising = true;
                 break;
             case "FinishLine":
-                print("Finish The game");
+                StartCoroutine(PlayNewLevel());
                 break;
             default:
                 break;
         }
     }
-
-    public void ResertBall()
+    IEnumerator GameOver()
     {
         move = false;
+        yield break;
+    }
+    IEnumerator PlayNewLevel()
+    {
+        Camera.main.GetComponent<CameraFollow>().enabled = false;
+        yield return new WaitForSeconds(1.5F);
+        move = false;
+        Camera.main.GetComponent<CameraFollow>().enabled = true;
+        GameController.instance.GenerateLevel();
     }
 }
