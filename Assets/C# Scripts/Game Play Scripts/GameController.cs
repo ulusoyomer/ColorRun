@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour
 {
     public static GameController instance { get; set; }
     private GameObject finishLine;
-
+    private float maxSpeed = 20;
     public Color[] colors;
     [HideInInspector]
     public Color hitColor, failColor;
@@ -22,6 +22,7 @@ public class GameController : MonoBehaviour
         GenerateColors();
         finishLine = Instantiate(Resources.Load("FinishLine") as GameObject, transform.position, Quaternion.identity);
         finishLine.tag = "FinishLine";
+        PlayerPrefs.GetInt("Level", 1);
     }
 
     void Start()
@@ -31,8 +32,24 @@ public class GameController : MonoBehaviour
 
     public void GenerateLevel()
     {
-        wallsSpawnNumber += 2;
-        Ball.speed += 0.50f;
+        if (PlayerPrefs.GetInt("Level") >= 1 && PlayerPrefs.GetInt("Level") <= 4)
+        {
+            wallsSpawnNumber += 2;
+            if (maxSpeed >= Ball.speed)
+                Ball.speed += 0.25f;
+        }
+        else if (PlayerPrefs.GetInt("Level") >= 5 && PlayerPrefs.GetInt("Level") <= 10)
+        {
+            wallsSpawnNumber += 3;
+            if (maxSpeed >= Ball.speed)
+                Ball.speed += 0.50f;
+        }
+        else
+        {
+            wallsSpawnNumber += 4;
+            if (maxSpeed >= Ball.speed)
+                Ball.speed += 0.75f;
+        }
         DeleteWalls();
         z = 7;
         colorBump = false;
@@ -76,18 +93,18 @@ public class GameController : MonoBehaviour
         {
             GameObject wall;
 
-            if (Random.value <= 0.2 && !colorBump)
+            if (Random.value <= 0.2 && !colorBump && PlayerPrefs.GetInt("Level") > 2)
             {
                 colorBump = true;
                 wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);
                 z += 7;
             }
-            else if (Random.value <= 0.2)
+            else if (Random.value <= 0.2 && PlayerPrefs.GetInt("Level") > 5)
             {
                 wall = Instantiate(Resources.Load("Wall") as GameObject, transform.position, Quaternion.identity);
                 z += 5;
             }
-            else if (i >= wallsSpawnNumber - 3 && !colorBump)
+            else if (i >= wallsSpawnNumber - 3 && !colorBump && PlayerPrefs.GetInt("Level") > 2)
             {
                 colorBump = true;
                 wall = Instantiate(Resources.Load("ChangeColor") as GameObject, transform.position, Quaternion.identity);
@@ -104,7 +121,7 @@ public class GameController : MonoBehaviour
             float randomRotation = Random.Range(0, 360);
             wall.transform.localRotation = Quaternion.Euler(new Vector3(0, 0, randomRotation));
 
-            finishLine.transform.localPosition = new Vector3(0, 0, z+7);
+            finishLine.transform.localPosition = new Vector3(0, 0, z + 7);
         }
     }
 }

@@ -14,6 +14,7 @@ TagManager:
   - FailWall
   - Road
   - Star
+  - Tap
   layers:
   - Default
   - TransparentFX

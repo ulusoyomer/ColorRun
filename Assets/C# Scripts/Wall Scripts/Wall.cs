@@ -39,7 +39,7 @@ public class Wall : MonoBehaviour
         wall1.transform.localPosition = Vector3.zero;
         wall2.transform.localPosition = Vector3.zero;
 
-        if (Random.value <= 0.2) smallWall = true;
+        if (Random.value <= 0.2 && PlayerPrefs.GetInt("Level") > 2) smallWall = true;
 
         if (smallWall)
         {

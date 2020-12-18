@@ -5,7 +5,10 @@ using UnityEngine.EventSystems;
 
 public class Tap : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
-    private static bool isTapped;
+    private void Start()
+    {
+    }
+    public static bool isTapped;
     public static bool GetIsTapped()
     {
         return isTapped;

@@ -13,25 +13,25 @@ public class Ball : MonoBehaviour
     public static Color Color { get { return currentColor; } set { currentColor = value; } }
     private float lerpAmount;
 
+    private SpriteRenderer splash;
+
 
     private MeshRenderer mesRenderer;
 
     void Start()
     {
         move = false;
+        Color = GameController.instance.hitColor;
     }
 
     private void Awake()
     {
         mesRenderer = GetComponent<MeshRenderer>();
+        splash = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     void FixedUpdate()
     {
-        if (!move)
-        {
-            Ball.z = 0;
-        }
         if (Tap.GetIsTapped())
             move = true;
         if (move)
@@ -86,14 +86,27 @@ public class Ball : MonoBehaviour
     }
     IEnumerator GameOver()
     {
+        Tap.isTapped = false;
         move = false;
-        yield break;
+
+        splash.transform.position = new Vector3(0, 0.6f, Ball.z - 0.06f);
+        splash.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.value * 360);
+        splash.color = currentColor;
+        splash.enabled = true;
+        mesRenderer.enabled = false;
+
+        yield return new WaitForSeconds(1.5f);
+
+        splash.enabled = false;
+        mesRenderer.enabled = true;
+        Ball.z = 0;
     }
     IEnumerator PlayNewLevel()
     {
         Camera.main.GetComponent<CameraFollow>().enabled = false;
         yield return new WaitForSeconds(1.5F);
         move = false;
+        PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
         Camera.main.GetComponent<CameraFollow>().enabled = true;
         GameController.instance.GenerateLevel();
     }
