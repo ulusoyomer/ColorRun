@@ -8,10 +8,13 @@ public class Ball : MonoBehaviour
     private static float z;
     private float height = 0.58f;
     public static float speed = 8;
-    private bool move,isRising;
+    private bool move, isRising;
     private static Color currentColor;
+    public static int WallCount = 0;
     public static Color Color { get { return currentColor; } set { currentColor = value; } }
     private float lerpAmount;
+
+    private int score = 0;
 
     private SpriteRenderer splash;
 
@@ -22,6 +25,7 @@ public class Ball : MonoBehaviour
     {
         move = false;
         Color = GameController.instance.hitColor;
+        
     }
 
     private void Awake()
@@ -32,6 +36,11 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
+
+        print("Level = "+PlayerPrefs.GetInt("Level", 1));
+        print("Score = " + score);
+        print("Wall = " + WallCount);
+
         if (Tap.GetIsTapped())
             move = true;
         if (move)
@@ -69,6 +78,11 @@ public class Ball : MonoBehaviour
         {
             case "Hit":
                 Destroy(target.transform.parent.gameObject);
+                if (WallCount >= GameObject.FindGameObjectsWithTag("HitWall").Length)
+                {
+                    score++;
+                    WallCount--;
+                }
                 break;
             case "Fail":
                 StartCoroutine(GameOver());
@@ -97,6 +111,7 @@ public class Ball : MonoBehaviour
 
         yield return new WaitForSeconds(1.5f);
 
+        Camera.main.GetComponent<CameraFollow>().Flash();
         splash.enabled = false;
         mesRenderer.enabled = true;
         Ball.z = 0;
@@ -104,10 +119,14 @@ public class Ball : MonoBehaviour
     IEnumerator PlayNewLevel()
     {
         Camera.main.GetComponent<CameraFollow>().enabled = false;
+
         yield return new WaitForSeconds(1.5F);
+
         move = false;
+        Camera.main.GetComponent<CameraFollow>().Flash();
         PlayerPrefs.SetInt("Level", PlayerPrefs.GetInt("Level") + 1);
         Camera.main.GetComponent<CameraFollow>().enabled = true;
         GameController.instance.GenerateLevel();
+        Ball.z = 0;
     }
 }

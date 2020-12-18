@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour
     [HideInInspector]
     public Color hitColor, failColor;
 
-    private int wallsSpawnNumber = 11;
+    private static int wallsSpawnNumber = 11;
     private float z = 7;
 
     private bool colorBump;
@@ -22,12 +22,13 @@ public class GameController : MonoBehaviour
         GenerateColors();
         finishLine = Instantiate(Resources.Load("FinishLine") as GameObject, transform.position, Quaternion.identity);
         finishLine.tag = "FinishLine";
-        PlayerPrefs.GetInt("Level", 1);
+        PlayerPrefs.SetInt("Level", 1);
     }
 
     void Start()
     {
         SpawnWalls();
+        
     }
 
     public void GenerateLevel()
@@ -54,6 +55,7 @@ public class GameController : MonoBehaviour
         z = 7;
         colorBump = false;
         SpawnWalls();
+        Ball.WallCount = wallsSpawnNumber;
     }
 
     private void DeleteWalls()
@@ -123,5 +125,6 @@ public class GameController : MonoBehaviour
 
             finishLine.transform.localPosition = new Vector3(0, 0, z + 7);
         }
+        Ball.WallCount = wallsSpawnNumber;
     }
 }
