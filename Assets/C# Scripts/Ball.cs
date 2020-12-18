@@ -14,7 +14,7 @@ public class Ball : MonoBehaviour
     public static Color Color { get { return currentColor; } set { currentColor = value; } }
     private float lerpAmount;
 
-    private int score = 0;
+    public static int score = 0;
 
     private SpriteRenderer splash;
 
@@ -36,10 +36,6 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        print("Level = "+PlayerPrefs.GetInt("Level", 1));
-        print("Score = " + score);
-        print("Wall = " + WallCount);
 
         if (Tap.GetIsTapped())
             move = true;
@@ -77,11 +73,19 @@ public class Ball : MonoBehaviour
         switch (target.tag)
         {
             case "Hit":
+                
                 Destroy(target.transform.parent.gameObject);
                 if (WallCount >= GameObject.FindGameObjectsWithTag("HitWall").Length)
                 {
                     score++;
                     WallCount--;
+                    GameObject pointDisplay = Instantiate(Resources.Load("PointDisplay"),
+                        transform.position, Quaternion.identity) as GameObject;
+                    pointDisplay.transform.SetParent(transform);
+                    if (score % 10 == 0)
+                        pointDisplay.GetComponent<PointDisplay>().SetText("Perfect " + score);
+                    else
+                        pointDisplay.GetComponent<PointDisplay>().SetText(score.ToString());
                 }
                 break;
             case "Fail":
