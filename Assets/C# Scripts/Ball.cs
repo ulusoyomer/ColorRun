@@ -18,8 +18,9 @@ public class Ball : MonoBehaviour
 
     private SpriteRenderer splash;
 
-
     private MeshRenderer mesRenderer;
+
+    private AudioSource failSound, hitSound, levelCompleteSound;
 
     void Start()
     {
@@ -30,7 +31,12 @@ public class Ball : MonoBehaviour
 
     private void Awake()
     {
+        failSound = GameObject.Find("FailSound").GetComponent<AudioSource>();
+        hitSound = GameObject.Find("HitSound").GetComponent<AudioSource>();
+        levelCompleteSound = GameObject.Find("LevelComplete").GetComponent<AudioSource>();
+
         mesRenderer = GetComponent<MeshRenderer>();
+
         splash = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
@@ -87,16 +93,17 @@ public class Ball : MonoBehaviour
                     else
                         pointDisplay.GetComponent<PointDisplay>().SetText(score.ToString());
                 }
+                hitSound.Play();
                 break;
             case "Fail":
-                StartCoroutine(GameOver());
+                StartCoroutine(GameOver());            
                 break;
             case "ColorRing":
                 lerpAmount = 0;
                 isRising = true;
                 break;
             case "FinishLine":
-                StartCoroutine(PlayNewLevel());
+                StartCoroutine(PlayNewLevel());         
                 break;
             default:
                 break;
@@ -106,7 +113,7 @@ public class Ball : MonoBehaviour
     {
         Tap.isTapped = false;
         move = false;
-
+        failSound.Play();
         splash.transform.position = new Vector3(0, 0.6f, Ball.z - 0.06f);
         splash.transform.eulerAngles = new Vector3(0, 0, UnityEngine.Random.value * 360);
         splash.color = currentColor;
@@ -123,7 +130,7 @@ public class Ball : MonoBehaviour
     IEnumerator PlayNewLevel()
     {
         Camera.main.GetComponent<CameraFollow>().enabled = false;
-
+        levelCompleteSound.Play();
         yield return new WaitForSeconds(1.5F);
 
         move = false;
