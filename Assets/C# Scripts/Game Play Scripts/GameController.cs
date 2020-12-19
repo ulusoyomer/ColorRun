@@ -58,6 +58,11 @@ public class GameController : MonoBehaviour
         Ball.WallCount = wallsSpawnNumber;
     }
 
+    internal float GetFinisLineDistance()
+    {
+        return finishLine.transform.position.z;
+    }
+
     private void DeleteWalls()
     {
         var wallList = GameObject.FindGameObjectsWithTag("Wall");
